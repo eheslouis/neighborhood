@@ -3,15 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>My Neighborhood</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
+</body>
 </head>
 <body>
-	<div id="map"></div>
-	
-    <script src="js/jquery.min.js"></script>
-    <script src="js/knockout-3.4.0.js"></script>
-	<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEcjirIbSGhQsAAyRwpvnU1Jf25rZLFOA&callback=initMap" async defer></script> -->
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEcjirIbSGhQsAAyRwpvnU1Jf25rZLFOA"></script>
-    <script src="js/script.js"></script>
+	<div class="page-title">
+		<h1>My Life in Hanoi, Vietnam</h1>
+	</div>
 
+	<!-- <div class="container map">
+		<div class="row map"> -->
+			<div class="col-xs-3" >
+				<ul id="place-list" data-bind="foreach: markersList">
+			        <li id="" data-bind="text: title, attr: {id: $index}"></li>
+			         <!--, click: $parent.updateNewCat"></li> -->
+			    </ul>
+			</div>
+			<div class="col-xs-9 map">
+				<div class="map" id="map"></div>
+			</div>
+		<!-- </div>
+	</div> -->
+	
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script src="js/knockout-3.4.0.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEcjirIbSGhQsAAyRwpvnU1Jf25rZLFOA"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/script.js"></script>
 </body>
