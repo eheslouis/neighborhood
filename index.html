@@ -11,24 +11,23 @@
 	<div class="page-title">
 		<h1>My Life in Hanoi, Vietnam</h1>
 	</div>
-
-	<!-- <div class="container map">
-		<div class="row map"> -->
-			<div class="col-xs-3" >
-				<ul id="place-list" data-bind="foreach: markersList">
-			        <li id="" data-bind="text: title, attr: {id: $index}"></li>
-			         <!--, click: $parent.updateNewCat"></li> -->
-			    </ul>
-			</div>
-			<div class="col-xs-9 map">
-				<div class="map" id="map"></div>
-			</div>
-		<!-- </div>
-	</div> -->
+	<div class="col-sm-3" >
+		<form class="search">
+			Search: <input type="text" id="searchText"><br>
+		</form>
+		<ul id="place-list" data-bind="foreach: placesList">
+			<!-- ko if: visible -->
+			<li class="place" id="" data-bind="text: title, attr: {id: $index}, click: $parent.clickPlace"></li>
+			<!-- /ko -->
+	    </ul> 
+	</div>
+	<div class="col-sm-9 map">
+		<div class="map" id="map"></div>
+	</div>
 	
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script src="js/knockout-3.4.0.js"></script>
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEcjirIbSGhQsAAyRwpvnU1Jf25rZLFOA"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAEcjirIbSGhQsAAyRwpvnU1Jf25rZLFOA"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/script.js"></script>
 </body>

@@ -1,10 +1,7 @@
-/** {
-    border: 1px solid red !important;
-}*/
-
-
-* {box-sizing:border-box;}
-body {background-color: #FFFFFF;}
+body {
+	background-color: #000000;
+    color: #F5F5DC;
+}
 
 html, body {
     height: 100%;
@@ -12,12 +9,34 @@ html, body {
     padding: 0;
 }
 
-h1{
+h1 {
     text-align: center;
 }
 
 .map {
-    height: 100%;
+    height: 95%;
     padding: 0;
     margin: 0;
+    color: #000000;
+}
+
+ul {
+	padding: 5px;
+}
+
+li {
+	list-style-type: none;
+	list-style-position:inside;
+    border: 2px solid red;
+    height: 4em;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+#searchText {
+	color: #000000;
+}
+
+.img-info {
+	max-height: 150px;
 }
