@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>My Neighborhood</title>
 	<link rel="stylesheet" href="css/bootstrap.min.css">
@@ -13,9 +13,9 @@
 	</div>
 	<div class="col-md-3" >
 		<form class="search">
-			Search: <input data-bind="textInput: filterText" type="text" id="searchText"><br>
+			Search: <input data-bind="textInput: filterText" type="text" id="search-text"><br>
 		</form>
-		<ul id="place-list" data-bind="foreach: placesList"> <!-- filteredList"> -->
+		<ul id="place-list" data-bind="foreach: filteredList">	
 			<li class="place" id="" data-bind="text: title, attr: {id: $index}, click: $parent.clickPlace"></li>
 	    </ul> 
 	</div>
@@ -23,15 +23,10 @@
 		<div class="map" id="map"></div>
 	</div>
 	
+    <script src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script src="js/knockout-3.4.0.js"></script>
-    <script src="js/jquery.min.js"></script>
-    <script async defer src="js/script.js"></script>
+    <script src="js/script.js"></script>
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEcjirIbSGhQsAAyRwpvnU1Jf25rZLFOA&callback=start" onerror="googleError()"></script>
-    <script> function googleError() {
-    			// error handling here
-    			alert("failed to get google map resources");
-			}
-	</script>
 </body>

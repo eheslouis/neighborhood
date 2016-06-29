@@ -44,9 +44,9 @@ var Place = function (data, map){
 	this.content = '<h3>' + self.title() + '</h3>';
 
 	this.marker = new google.maps.Marker({
-	    position: this.position(),
-	    map: map,
-	    title: this.title()
+		position: this.position(),
+		map: map,
+		title: this.title()
 	  });
 	self.marker.setAnimation(null); //init marker with no animation
 
@@ -61,45 +61,29 @@ var Place = function (data, map){
 	},this);
 
 	//search wikipedia for info on place
-    $.ajax({
-        url: wikiURL+self.searchWiki,
-        dataType: 'jsonp',
-    	timeout: 8000,
-        success: function(data) {
-           self.content = '<h3>' + self.title() + '</h3>'+'<p>' + data[2][0] +'<a href=' + data[3][0] + ' target="blank"> Wikipedia</a></p>';
-        },
-        fail: function(){
-        	alert("failed to get wikipedia resources");
-        }
-    });
+	$.ajax({
+		url: wikiURL+self.searchWiki,
+		dataType: 'jsonp',
+		timeout: 1000
+	}).done(function(data) {
+		   self.content = '<h3>' + self.title() + '</h3>'+'<p>' + data[2][0] +'<a href=' + data[3][0] + ' target="blank"> Wikipedia</a></p>';
+	}).fail(function(jqXHR, textStatus){
+			alert("failed to get wikipedia resources");
+	});
 
-    $.ajax({
-        url: flickrUrl+self.searchWiki,
-        dataType: 'jsonp',
-        jsonp: 'jsoncallback',
-    	timeout: 8000,
-        success: function(data) {
-        	var url = flickrPic.replace('{farm-id}',data.photos.photo[0].farm).replace('{server-id}',data.photos.photo[0].server).replace('{id}',data.photos.photo[0].id).replace('{secret}',data.photos.photo[0].secret);
-            self.content += '<img class="img-info" src="'+ url +'">';
-        },
-        fail: function() {
-		    alert("failed to get flickr resources");
-        }
-    });
-
-    //bounce marker when click on it or list
-    this.toggleBounce = function() {
-	  	if (self.marker.getAnimation() !== null) 
-	  	{
-	    	self.marker.setAnimation(null);
-	  	} 
-	  	else 
-	  	{
-	    	self.marker.setAnimation(google.maps.Animation.BOUNCE);
-	    	setTimeout(function(){
-    			self.marker.setAnimation(null);
+	//bounce marker when click on it or list
+	this.toggleBounce = function() {
+		if (self.marker.getAnimation() !== null) 
+		{
+			self.marker.setAnimation(null);
+		} 
+		else 
+		{
+			self.marker.setAnimation(google.maps.Animation.BOUNCE);
+			setTimeout(function(){
+				self.marker.setAnimation(null);
 			}, 2000);
-	  	}
+		}
 	};
 };
 
@@ -111,8 +95,8 @@ var ViewModel = function(){
 	this.map = new google.maps.Map(document.getElementById('map'), {
 		center: initLocation,
 		zoom: 13
-  	});
-  	//initialize for marker List
+	});
+	//initialize for marker List
 	this.placesList = ko.observableArray([]);
 		myPlaces.forEach(function(placeItem){
 			self.placesList.push(new Place(placeItem, self.map));
@@ -121,7 +105,7 @@ var ViewModel = function(){
 	//setup the event listeners for marker clicks
 	this.placesList().forEach(function(place){
 		google.maps.event.addListener(place.marker, 'click', function () {
-		    self.clickPlace(place);
+			self.clickPlace(place);
 		});
 	});
 
@@ -147,4 +131,9 @@ var ViewModel = function(){
 
 function start(){
 	ko.applyBindings(new ViewModel());
+}
+
+function googleError() {
+	// error handling here
+	alert("failed to get google map resources");
 }
