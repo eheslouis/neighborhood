@@ -53,7 +53,7 @@ var Place = function (data, map){
 	//when search is reset, recheck the visibility
 	this.visible = ko.computed(function(){
 		if (filterText().length > 0){
-			return (self.title().toLowerCase().indexOf(filterText().toLowerCase()) > -1)
+			return (self.title().toLowerCase().indexOf(filterText().toLowerCase()) > -1);
 		}
 		else{
 			return true;
@@ -98,9 +98,9 @@ var Place = function (data, map){
 	    	self.marker.setAnimation(google.maps.Animation.BOUNCE);
 	    	setTimeout(function(){
     			self.marker.setAnimation(null);
-			}, 2000)
+			}, 2000);
 	  	}
-	}
+	};
 };
 
 var ViewModel = function(){
@@ -129,9 +129,9 @@ var ViewModel = function(){
 	var infowindow = new google.maps.InfoWindow();
 	this.clickPlace = function(place){
 		infowindow.setContent(place.content);
-		infowindow.open(map, place.marker);
+		infowindow.open(this.map, place.marker);
 		place.toggleBounce();
-	}
+	};
 
 	self.filteredList = ko.computed(function(){
 		var filtered = [];
@@ -148,5 +148,3 @@ var ViewModel = function(){
 function start(){
 	ko.applyBindings(new ViewModel());
 }
-
-
