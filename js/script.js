@@ -26,13 +26,11 @@ var myPlaces =
 		title: "Pagoda Trấn Quốc",
 		search: "Trấn Quốc Pagoda"
 	}
-
 ];
 
+var filterText = ko.observable("");
+
 var wikiURL ='https://en.wikipedia.org/w/api.php?action=opensearch&format=json&callback=wikiCallBack&search=';
-var wikiRequestTimeout = setTimeout(function(){
-	    alert("failed to get wikipedia resources");
-	}, 8000);
 
 var flickrUrl = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=6937383c723fa2089a26ae7e3a4fa4cc&format=json&page=1&per_page=1&text=';
 var flickrPic = 'https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}.jpg';
@@ -52,22 +50,12 @@ var Place = function (data, map){
 	  });
 	self.marker.setAnimation(null); //init marker with no animation
 
-	this.search = ko.observable("");
 	//when search is reset, recheck the visibility
 	this.visible = ko.computed(function(){
-		if (self.search().length > 0)
-		{
-			if (self.title().toLowerCase().indexOf(self.search().toLowerCase()) > -1)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+		if (filterText().length > 0){
+			return (self.title().toLowerCase().indexOf(filterText().toLowerCase()) > -1)
 		}
-		else
-		{
+		else{
 			return true;
 		}
 	},this);
@@ -76,9 +64,12 @@ var Place = function (data, map){
     $.ajax({
         url: wikiURL+self.searchWiki,
         dataType: 'jsonp',
+    	timeout: 8000,
         success: function(data) {
            self.content = '<h3>' + self.title() + '</h3>'+'<p>' + data[2][0] +'<a href=' + data[3][0] + ' target="blank"> Wikipedia</a></p>';
-           clearTimeout(wikiRequestTimeout);
+        },
+        fail: function(){
+        	alert("failed to get wikipedia resources");
         }
     });
 
@@ -86,16 +77,12 @@ var Place = function (data, map){
         url: flickrUrl+self.searchWiki,
         dataType: 'jsonp',
         jsonp: 'jsoncallback',
+    	timeout: 8000,
         success: function(data) {
         	var url = flickrPic.replace('{farm-id}',data.photos.photo[0].farm).replace('{server-id}',data.photos.photo[0].server).replace('{id}',data.photos.photo[0].id).replace('{secret}',data.photos.photo[0].secret);
             self.content += '<img class="img-info" src="'+ url +'">';
-
-
-
-            // https://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}.jpg';
-            console.log(data);
         },
-        error: function() {
+        fail: function() {
 		    alert("failed to get flickr resources");
         }
     });
@@ -109,12 +96,16 @@ var Place = function (data, map){
 	  	else 
 	  	{
 	    	self.marker.setAnimation(google.maps.Animation.BOUNCE);
+	    	setTimeout(function(){
+    			self.marker.setAnimation(null);
+			}, 2000)
 	  	}
 	}
 };
 
 var ViewModel = function(){
 	var self = this;
+	// this.filterText = ko.observable();
 
 	//init map
 	this.map = new google.maps.Map(document.getElementById('map'), {
@@ -142,23 +133,20 @@ var ViewModel = function(){
 		place.toggleBounce();
 	}
 
-	//search throught the list
-	$(".search").on('input',"#searchText", function(e){
-		var searchNew = $(this).val(); //value to search
-		self.placesList().forEach(function(place){ //for each place
-			//reset the search
-			place.search(searchNew);
-			//if the place is visible, keep it on map
+	self.filteredList = ko.computed(function(){
+		var filtered = [];
+		this.placesList().forEach(function(place){
 			if (place.visible())
 			{
-				place.marker.setMap(self.map);
-			}
-			else //otherwise remove it from map
-			{
-				place.marker.setMap(null);
+				filtered.push(place);
 			}
 		});
-	});
+		return filtered;
+	}, this);
 };
 
-ko.applyBindings(new ViewModel());
+function start(){
+	ko.applyBindings(new ViewModel());
+}
+
+
